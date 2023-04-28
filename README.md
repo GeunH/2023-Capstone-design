@@ -9,7 +9,7 @@ Hardware : Raspberry Pi 4B
 
                                                        
                                                        
-                                                            Image Data Set                                                     
+                                                Image Data Set                                                     
 ![그림1](https://user-images.githubusercontent.com/114638557/235034197-e08c99e3-0077-4841-be45-ca01519de115.png)
 
                                                   
