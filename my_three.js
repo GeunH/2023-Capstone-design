@@ -30,9 +30,6 @@ function animate() {
 animate();
 }
 
-const vertices = []; // 정점 좌표를 저장할 배열
-const colors = []; // RGB 값을 저장할 배열
-
 const loader = new OBJLoader();
 loader.load("pizhon_256.obj", (obj) => {
     init(obj.children[0].geometry);
