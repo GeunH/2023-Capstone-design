@@ -3,4 +3,5 @@ Instant Nerf기술을 활용한 거래물품 사전 확인 시스템 - 2023년 �
 
 Software : Node.js(Three.js), html, python, flutter 
 
-Hardware : Rasberry Pi 4B
+Hardware : Raspberry Pi 4B
+![제목 없음](https://user-images.githubusercontent.com/114638557/235033286-cc04eace-e265-4f16-918e-3dc2035877e2.png)
