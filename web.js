@@ -10,7 +10,7 @@ const server = http.createServer((req, res) => {
 
   let filePath;
   if (req.url === '/') {
-    filePath = path.join(__dirname, 'index.html');
+    filePath = path.join(__dirname, 'web.html');
   } else {
     filePath = path.join(__dirname, req.url);
   }
