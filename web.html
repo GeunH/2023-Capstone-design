@@ -4,37 +4,60 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title> 3D modeling View</title>
-    <style>
-      body {
-        margin: 0;
-      }
-    </style>
   </head>
   <body>
     <ul id="fileList"></ul>
     <script>
-    fetch('ip/files')
-      .then(response => response.json())
-      .then(data => {
-        const fileListElement = document.getElementById('fileList');
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].endsWith('.obj')) { // ".obj" 파일만 라디오 버튼으로 생성합니다.
-            const fileListItem = document.createElement('li');
-            const radioButton = document.createElement('input');
-            radioButton.type = 'radio';
-            radioButton.name = 'file';
-            radioButton.value = data[i];
-            radioButton.addEventListener('change', (event) => {
-              selectedFile = event.target.value;
+      const fileListElement = document.getElementById('fileList');
+      let selectedFile = '';
+      function getFileList() {
+        fetch('http://192.168.0.64:3050/files')
+          .then(response => response.json())
+          .then(data => {
+            fileListElement.innerHTML = ''; // 기존의 파일 리스트를 지웁니다.
+            for (let i = 0; i < data.length; i++) {
+              if (data[i].endsWith('.obj')) { // ".obj" 파일만 라디오 버튼으로 생성합니다.
+                const fileListItem = document.createElement('li');
+                const radioButton = document.createElement('input');
+                radioButton.type = 'radio';
+                radioButton.name = 'file';
+                radioButton.value = data[i];
+                radioButton.addEventListener('change', (event) => {
+                  selectedFile = event.target.value;
+                });
+                if (data[i] === selectedFile) { 
+                  radioButton.checked = true;
+                }
+                fileListItem.appendChild(radioButton);
+                fileListItem.appendChild(document.createTextNode(data[i]));
+                fileListElement.appendChild(fileListItem);
+              }
+            }
+          
+        })
+        .catch(error => console.error(error));
+      }
+        const submitButton = document.createElement('button');
+        submitButton.textContent = '선택';
+        submitButton.addEventListener('click', () => {
+        const selectedFile = document.querySelector('input[name="file"]:checked');
+        if (selectedFile) {
+          const fileName = selectedFile.value;
+          const windowFeatures = 'height=400,width=400';
+          const jsWindow = window.open('objj.html', '', windowFeatures);
+          jsWindow.addEventListener('load', () => {
+            new Promise((resolve, reject) => {
+              jsWindow.onload = () => {
+                resolve();
+              };
+            }).then(() => {
+              jsWindow.initscene(fileName);
             });
-            fileListItem.appendChild(radioButton);
-            fileListItem.appendChild(document.createTextNode(data[i]));
-            fileListElement.appendChild(fileListItem);
-          }
+          });
         }
       })
-      .catch(error => console.error(error));
-   </script>
-    <script type="module" src="abcd.js"> </script>
+      fileListElement.after(submitButton);
+      setInterval(getFileList, 1000);
+   </script> 
   </body>
 </html>
