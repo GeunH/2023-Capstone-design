@@ -1,6 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <style>
+      h2 {
+        margin-top: 20px;
+        font-size: 2em;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
+        color: white;
+        text-transform: uppercase;
+        text-indent: 20px;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+      }
+      
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: Arial, sans-serif;
+      }
+      
+      body {
+          background-image: url('https://github.com/GeunH/2023-Capstone-design/blob/main/bground.png?raw=true');
+          background-size: cover;
+          background-position: center center;
+          background-attachment: fixed;
+      }
+      
+      ul {
+          list-style: none;
+      }
+      
+      #fileList {
+          color:White;
+          max-width: 200px;
+          padding: 20px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          margin: 20px;
+      }
+      
+      li {
+          margin: 10px 0;
+          display: flex;
+          align-items: center;
+      }
+      
+      li label {
+          margin-left: 10px;
+      }
+      
+      button {
+          margin: 20px;
+          padding: 10px 20px;
+          border: none;
+          background-color: #546372;
+          color: #fff;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background-color 0.3s ease-in-out;
+      }
+      
+      button:hover {
+          background-color: #0069d9;
+      }
+    </style>
+    <h2> 거래 물품 사전 확인 </h2>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title> 3D modeling View</title>
@@ -11,7 +77,7 @@
       const fileListElement = document.getElementById('fileList');
       let selectedFile = '';
       function getFileList() {
-        fetch('http://서버ip주소/files')
+        fetch('http://192.168.0.38:3050/files')
           .then(response => response.json())
           .then(data => {
             fileListElement.innerHTML = ''; // 기존의 파일 리스트를 지웁니다.
@@ -37,7 +103,7 @@
         .catch(error => console.error(error));
       }
         const submitButton = document.createElement('button');
-        submitButton.textContent = '선택';
+        submitButton.textContent = '모델링 파일 View';
         submitButton.addEventListener('click', () => {
         const selectedFile = document.querySelector('input[name="file"]:checked');
         if (selectedFile) {
