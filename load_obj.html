@@ -24,11 +24,10 @@
       const controls = new OrbitControls(camera, renderer.domElement);
       controls.update();
 
-      function init (geometry) { 
+      function init (geometry) {
         const material = new THREE.MeshMatcapMaterial({
           // color 속성 대신 vertexColors 속성을 사용하여 Vertex Colors를 활성화
           vertexColors: THREE.VertexColors,
-          
         });
         const mesh = new THREE.Mesh(geometry, material);
         scene.add(mesh);
@@ -41,13 +40,11 @@
       }
       const loader = new OBJLoader();
       window.initscene = initscene;
-
       function initscene(filename) {
-        loader.load('/models/' + filename, (obj) => {
+        loader.load('models/' + filename, (obj) => {
           init(obj.children[0].geometry);
         });
       }
-      
       function handleWindowResize () {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
@@ -55,6 +52,6 @@
       }
 
       window.addEventListener('resize', handleWindowResize, false);
-    </script>>
+    </script>
   </body>
 </html>
