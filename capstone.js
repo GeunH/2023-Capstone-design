@@ -6,14 +6,14 @@ const path = require('path');
 app.use('/models', express.static('models'));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'web.html'));
 });
-app.get('/objj.html', (req, res) => {
-  res.sendFile(path.join(__dirname, 'objj.html'));
+app.get('/load_obj.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'load_obj.html'));
 });
 
 app.get('/files', (req, res) => {
-  const folderPath = 'C:/Users/ESE/Desktop/capstone/models';
+  const folderPath = 'obj파일이 담긴 폴더의 경로';
   fs.readdir(folderPath, (err, files) => {
     if (err) {
       console.error(err);
