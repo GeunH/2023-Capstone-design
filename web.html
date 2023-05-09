@@ -11,7 +11,7 @@
       const fileListElement = document.getElementById('fileList');
       let selectedFile = '';
       function getFileList() {
-        fetch('http://192.168.0.64:3050/files')
+        fetch('http://서버ip주소/files')
           .then(response => response.json())
           .then(data => {
             fileListElement.innerHTML = ''; // 기존의 파일 리스트를 지웁니다.
@@ -25,7 +25,7 @@
                 radioButton.addEventListener('change', (event) => {
                   selectedFile = event.target.value;
                 });
-                if (data[i] === selectedFile) { 
+                if (data[i] === selectedFile) {
                   radioButton.checked = true;
                 }
                 fileListItem.appendChild(radioButton);
@@ -33,7 +33,6 @@
                 fileListElement.appendChild(fileListItem);
               }
             }
-          
         })
         .catch(error => console.error(error));
       }
@@ -44,20 +43,14 @@
         if (selectedFile) {
           const fileName = selectedFile.value;
           const windowFeatures = 'height=400,width=400';
-          const jsWindow = window.open('objj.html', '', windowFeatures);
+          const jsWindow = window.open('load_obj.html', '', windowFeatures);
           jsWindow.addEventListener('load', () => {
-            new Promise((resolve, reject) => {
-              jsWindow.onload = () => {
-                resolve();
-              };
-            }).then(() => {
-              jsWindow.initscene(fileName);
-            });
+            jsWindow.initscene(fileName);
           });
         }
       })
       fileListElement.after(submitButton);
       setInterval(getFileList, 1000);
-   </script> 
+    </script>
   </body>
 </html>
