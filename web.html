@@ -96,7 +96,7 @@
       let o_b = false;
       let i_b = false;
       function getFileList() {
-        fetch('http://localhost:3040/files')
+        fetch('http://localhost:3050/files')
           .then(response => response.json())
           .then(data => {
             fileListElement.innerHTML = ''; // 기존의 obj 파일 목록을 지웁니다.
@@ -146,7 +146,7 @@
       }
 
       function downloadFile(fileName) {
-        fetch(`http://localhost/files/${fileName}`)
+        fetch(`http://localhost:3050/files/${fileName}`)
           .then(response => response.blob())
           .then(blob => {
             const url = window.URL.createObjectURL(new Blob([blob]));
@@ -183,23 +183,32 @@
 
       const customButton = document.getElementById('customButton');
       customButton.addEventListener('click', () => {
-        // 서버로 요청 보내기
-        fetch('/execute-script', {
-          method: 'GET'
-        })
-        .then(response => {
-          if (response.ok) {
-            // 요청이 성공적으로 처리됐을 때의 동작
-            console.log('Script executed successfully');
-          } else {
-            // 요청이 실패했을 때의 동작
-            console.error('Error executing script');
-          }
-        })
-        .catch(error => {
-          // 에러 처리
-          console.error('Request failed:', error);
-        });
+        const selectedIngpFile = document.querySelector('input[name="file"]:checked');
+
+        if (selectedIngpFile !== null) {
+          const fileName = selectedIngpFile.value;
+          fetch('/execute-script', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ fileName: fileName })
+          })
+          .then(response => {
+            if (response.ok) {
+              // 요청이 성공적으로 처리됐을 때의 동작
+              console.log('Script executed successfully');
+            } else {
+              // 요청이 실패했을 때의 동작
+              console.error('Error executing script');
+            }
+          })
+          .catch(error => {
+            // 에러 처리
+            console.error('Request failed:', error);
+          });
+        }
+        
       });
 
 
