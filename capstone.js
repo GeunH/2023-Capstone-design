@@ -6,9 +6,9 @@ const fs = require('fs');
 const path = require('path');
 app.use(cors());
 app.use('/models', express.static('models'));
-
+app.use(express.json());
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'webb.html'));
+  res.sendFile(path.join(__dirname, 'web.html'));
 });
 
 app.get('/load_obj.html', (req, res) => {
@@ -27,29 +27,21 @@ app.get('/files', (req, res) => {
 });
 
 
-app.get('/execute-script', (req, res) => {
-  exec('cd "C:/Users/ESE/Desktop/Instant-NGP-for-GTX-1000" && instant-ngp RACKA_SAM_base.ingp', (error, stdout, stderr) => {
+app.post('/execute-script', (req, res) => {
+  const fileName = req.body.fileName;
+  const scriptPath = `C:/Users/ESE/Desktop/Instant-NGP-for-GTX-1000`;
+  const command = `cd "${scriptPath}" && instant-ngp ${fileName}`;
+  console.log(`Script output: ${fileName}`);
+  exec(command, (error, stdout, stderr) => {
     if (error) {
       console.error(`Error executing script: ${error.message}`);
       return res.status(500).send('Error executing script');
     }
-    console.log(`Script output: ${stdout}`);
+    console.log(`Script output: ${stdout} and ${fileName}`);
 
-    const executionDataFilePath = 'executionData.txt';
-    fs.writeFile(executionDataFilePath, stdout, (err) => {
-      if (err) {
-        console.error(`Error saving execution data: ${err.message}`);
-        return res.status(500).send('Error saving execution data');
-      }
-      console.log('Execution data saved successfully');
-
-      // 클라이언트에 GUI 데이터 파일의 URL을 전달
-      const guiDataFileURL = `http://192.168.0.59/executionData.txt`;
-      res.send({ url: guiDataFileURL });
-    });
   });
 });
-const PORT = 3040;
+const PORT = 3050;
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
 });
