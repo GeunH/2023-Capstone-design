@@ -8,7 +8,7 @@ app.use(cors());
 app.use('/models', express.static('models'));
 app.use(express.json());
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'web.html'));
+  res.sendFile(path.join(__dirname, 'webb.html'));
 });
 
 app.get('/load_obj.html', (req, res) => {
@@ -29,7 +29,7 @@ app.get('/files', (req, res) => {
 
 app.post('/execute-script', (req, res) => {
   const fileName = req.body.fileName;
-  const scriptPath = `C:/Users/ESE/Desktop/Instant-NGP-for-GTX-1000`;
+  const scriptPath = `C:/Users/ESE/Desktop/capstone/models`;
   const command = `cd "${scriptPath}" && instant-ngp ${fileName}`;
   console.log(`Script output: ${fileName}`);
   exec(command, (error, stdout, stderr) => {
