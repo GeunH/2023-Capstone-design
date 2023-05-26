@@ -15,6 +15,10 @@ app.get('/load_obj.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'load_obj.html'));
 });
 
+app.get('/web.js', (req, res) => {
+  res.sendFile(path.join(__dirname, 'web.js'));
+});
+
 app.get('/files', (req, res) => {
   const folderPath = 'C:/Users/ESE/Desktop/capstone/models';
   fs.readdir(folderPath, (err, files) => {
