@@ -10,11 +10,6 @@ import numpy as np
 import zipfile
 import pickle
 
-from google.oauth2.credentials import Credentials
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
-from googleapiclient.http import MediaFileUpload, MediaIoBaseUpload
-
 GPIO.setmode(GPIO.BCM)
 
 STEP_PIN = 21  # arduino 6
@@ -98,7 +93,6 @@ class CameraThread(threading.Thread):
         threading.Thread.__init__(self)
         self.camera = picamera.PiCamera()
         self.camera.resolution = (3280, 2464)  # 원하는 해상도 설정
-        #self.camera.resolution = (1280, 720)
         self.frames = []
         self.stopped = False
 
@@ -229,10 +223,8 @@ if __name__ == '__main__':
         
         pause_event.clear()
         
-        step_motor(1)
-        step_motor(1)
-        step_motor(1)
-        step_motor(1)
+        for i in range(0,4):
+            step_motor(1)
         
         
         gear_angle(115)
@@ -257,21 +249,19 @@ if __name__ == '__main__':
                 zipf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), os.path.join(folder_path, '..')))
         zipf.close()
         
-        # zip 파일 업로드
-        file_metadata = {'name': folder_name + '.zip'}
-        media = MediaFileUpload(zip_path, resumable=True)
-        file = drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()
-        print(f'Uploaded {file_metadata["name"]}. File ID: {file.get("id")}')
-        
         # zip 파일 삭제
         os.remove(zip_path)
         # 카메라 쓰레드 중지
+        
+        pause_event.set()
         
         camera_thread.stop()
         camera_thread.join()
         
         save_thread.stop()
         save_thread.join()
+        
+        pause_event.clear()
         
         GPIO.output(EN_PIN, GPIO.HIGH)
         GPIO.cleanup()       
