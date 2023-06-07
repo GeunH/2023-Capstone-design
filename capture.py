@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import time
 import threading
 import picamera
@@ -9,6 +10,7 @@ import io
 import numpy as np
 import zipfile
 import pickle
+
 
 GPIO.setmode(GPIO.BCM)
 
@@ -35,7 +37,7 @@ GPIO.setup(Car_Wheel_3, GPIO.OUT)
 GPIO.setup(Car_Wheel_4, GPIO.OUT)
 
 GPIO.setup(SERVO_PIN, GPIO.OUT)
-pwm = GPIO.PWM(SERVO_PIN, 50)  # 서보모터를 제어하기 위해 50Hz의 주파수로 PWM을 설정합니다.
+pwm = GPIO.PWM(SERVO_PIN, 50) 
 pwm.start(0)
 
 GEAR_PIN = 19
@@ -53,16 +55,16 @@ go_left.start(0)
 go_right = GPIO.PWM(SPEED_2, 1000)
 go_right.start(0)
 
-#camera = picamera.PiCamera()
-folder_name = 'object_img'
+folder_name = time.strftime('%Y%m%d%H%M%S')
 SAVE_DIRECTORY = '/home/pi/capstone/images/'+ folder_name
 if not os.path.exists(SAVE_DIRECTORY):
     os.makedirs(SAVE_DIRECTORY)
+    os.makedirs(SAVE_DIRECTORY + "/images")
 
 
 def step_motor(_dir):
     GPIO.output(EN_PIN, GPIO.LOW)
-    if(_dir == 1) :  # 아래로 가는 것
+    if(_dir == 1) :  
         GPIO.output(DIR_PIN, GPIO.HIGH)
         for i in range(5000):
             GPIO.output(STEP_PIN, GPIO.HIGH)
@@ -71,7 +73,7 @@ def step_motor(_dir):
             time.sleep(0.0006)
         time.sleep(1)
         
-    # GPIO LOW 가 올라가는 코드
+    # GPIO LOW 
     elif(_dir == 0):
         GPIO.output(DIR_PIN, GPIO.LOW)
         for i in range(5000):
@@ -81,18 +83,11 @@ def step_motor(_dir):
             time.sleep(0.0006)
         time.sleep(1)
 
-def record_video():
-    camera.resolution = (1920, 1080)
-    camera.start_preview()
-    camera.start_recording('video.h264')
-    # time.sleep(10)  # 영상 녹화 시간 (초)
-
-
 class CameraThread(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
         self.camera = picamera.PiCamera()
-        self.camera.resolution = (3280, 2464)  # 원하는 해상도 설정
+        self.camera.resolution = (3280, 2464)
         self.frames = []
         self.stopped = False
 
@@ -107,13 +102,15 @@ class CameraThread(threading.Thread):
         stream.seek(0)
         data = np.frombuffer(stream.getvalue(), dtype=np.uint8)
         image = cv2.imdecode(data, cv2.IMREAD_COLOR)
-        return image
+        
+        flipped_image = cv2.flip(image, 0)
+        return flipped_image
 
     def stop(self):
         self.stopped = True
 
 
-# 이벤트 객체 생성
+# �̺�Ʈ ��ü ����
 pause_event = threading.Event()
 
 class SaveThread(threading.Thread):
@@ -122,14 +119,15 @@ class SaveThread(threading.Thread):
         threading.Thread.__init__(self)
         self.stopped = False
 
+
     def run(self):
         while not self.stopped:
-            pause_event.wait()  # 이벤트가 설정될 때까지 대기
+            pause_event.wait()  
 
             if len(camera_thread.frames)>0 :
                 if self.frame_cnt % 2 == 0:     
                     filename = f'frame_{self.frame_cnt//2}.jpg'
-                    file_path = os.path.join(SAVE_DIRECTORY,filename)
+                    file_path = os.path.join(SAVE_DIRECTORY + "/images", filename)
                     cv2.imwrite(file_path, camera_thread.frames[0])
                 self.frame_cnt += 1
                 camera_thread.frames = []
@@ -145,10 +143,10 @@ def car_moving():
     GPIO.output(Car_Wheel_2, GPIO.LOW)
     GPIO.output(Car_Wheel_3, GPIO.HIGH)
     GPIO.output(Car_Wheel_4, GPIO.LOW)
-    go_left.ChangeDutyCycle(60)
-    go_right.ChangeDutyCycle(60)
+    go_left.ChangeDutyCycle(87)
+    go_right.ChangeDutyCycle(87)
 
-    time.sleep(40) # 35초sleep
+    time.sleep(45) # 35��sleep
     
 def car_stop():
     # while True:
@@ -176,8 +174,7 @@ def gear_angle(angle):
 
 if __name__ == '__main__':
     try:
-        
-        # 카메라 쓰레드 시작
+       
         camera_thread = CameraThread()
         camera_thread.start()
         
@@ -186,35 +183,16 @@ if __name__ == '__main__':
         
         pause_event.set()
         
-        set_angle(25)
-        car_moving()
-        car_stop()
-        pause_event.clear()
-        step_motor(0)
-        pause_event.set()
+        for i in range(0,4):
+            set_angle(25 - 5 * i)
+            car_moving()
+            car_stop()
+            pause_event.clear()
+            step_motor(0)
+            pause_event.set()
+    
         
-        set_angle(20)
-        car_moving()
-        car_stop()
-        pause_event.clear()
-        step_motor(0)
-        pause_event.set()
-        
-        set_angle(15)
-        car_moving()
-        car_stop()
-        pause_event.clear()
-        step_motor(0)
-        pause_event.set()
-        
-        
-        set_angle(10)
-        car_moving()
-        car_stop()
-        pause_event.clear()
-        step_motor(0)
-        pause_event.set()
-        
+        time.sleep(1)
         gear_angle(68)
         gear_angle(68)
         set_angle(5)
@@ -224,58 +202,35 @@ if __name__ == '__main__':
         pause_event.clear()
         
         for i in range(0,4):
-            step_motor(1)
-        
-        
+           step_motor(1)
+           
+        time.sleep(1)
         gear_angle(115)
         gear_angle(115)
         
-        creds = None
-        with open('token.pickle', 'rb') as token:
-            creds = pickle.load(token)
         
-        # Google Drive API 클라이언트 생성
-        drive_service = build('drive', 'v3', credentials=creds)
-        
-        # 폴더 경로
-        folder_path = '/home/pi/capstone/images/object_img'
-        
-        # 폴더를 zip 파일로 압축
-        folder_name = os.path.basename(folder_path)
-        zip_path = os.path.join(os.path.dirname(folder_path), folder_name + '.zip')
+        folder_path = SAVE_DIRECTORY
+        zip_directory = '/home/pi/capstone/images/zip'  
+        zip_path = os.path.join(zip_directory, folder_name + '.zip')
         zipf = zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED)
         for root, dirs, files in os.walk(folder_path):
             for file in files:
                 zipf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), os.path.join(folder_path, '..')))
         zipf.close()
         
-        # zip 파일 삭제
-        os.remove(zip_path)
-        # 카메라 쓰레드 중지
-        
+        time.sleep(3)
         pause_event.set()
-        
         camera_thread.stop()
         camera_thread.join()
         
         save_thread.stop()
         save_thread.join()
-        
         pause_event.clear()
         
         GPIO.output(EN_PIN, GPIO.HIGH)
-        GPIO.cleanup()       
+        GPIO.cleanup()   
         
         
     except KeyboardInterrupt:
-        
         GPIO.output(EN_PIN, GPIO.HIGH)
         GPIO.cleanup()
-        
-        
-        
-        
-        
-        
-        
-        
