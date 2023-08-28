@@ -16,3 +16,14 @@ Hardware : Raspberry Pi 4B
 Create 3D Model with surrounding viewpoints.
 
 ![그림2](https://user-images.githubusercontent.com/114638557/235034201-8b992f28-f8f5-4508-a51a-5ca9c67e391f.png)
+
+
+HW 3D Model Design
+1. moving Car
+![차량](https://github.com/hyeokzzi/2023-Capstone-design/assets/87352996/eccb2163-1e81-4560-b445-5b79b1ff4eed)
+
+   
+2. Rali
+![레일](https://github.com/hyeokzzi/2023-Capstone-design/assets/87352996/a7b9eac4-fea1-4897-b7ce-c931f753dcc6)
+   
+![합체](https://github.com/hyeokzzi/2023-Capstone-design/assets/87352996/c8d504b6-d778-452b-9ee3-e440933b92f7)
