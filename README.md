@@ -20,10 +20,11 @@ Create 3D Model with surrounding viewpoints.
 
 HW 3D Model Design
 1. moving Car
-![차량](https://github.com/hyeokzzi/2023-Capstone-design/assets/87352996/eccb2163-1e81-4560-b445-5b79b1ff4eed)
+<img src="https://github.com/hyeokzzi/2023-Capstone-design/assets/87352996/eccb2163-1e81-4560-b445-5b79b1ff4eed.png" width="400" height="400"/>
 
    
 2. Rali
-![레일](https://github.com/hyeokzzi/2023-Capstone-design/assets/87352996/a7b9eac4-fea1-4897-b7ce-c931f753dcc6)
+<img src="https://github.com/hyeokzzi/2023-Capstone-design/assets/87352996/a7b9eac4-fea1-4897-b7ce-c931f753dcc6.png" width="400" height="400"/>
+
    
-![합체](https://github.com/hyeokzzi/2023-Capstone-design/assets/87352996/c8d504b6-d778-452b-9ee3-e440933b92f7)
+<img src="https://github.com/hyeokzzi/2023-Capstone-design/assets/87352996/c8d504b6-d778-452b-9ee3-e440933b92f7.png" width="400" height="400"/>
