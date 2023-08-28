@@ -1,6 +1,8 @@
 # 2023-Capstone-design
 Instant Nerf기술을 활용한 거래물품 사전 확인 시스템 - 2023년 인천대학교 임베디드시스템공학과 캡스턴디자인
 
+- 중고거래 시, 사기를 예방하기 위한 시스템으로 판매하려는 물품을 Instant-Nerf 기술을 통해 3D 이미지로 추출하여 판매자가 구매자에게 신뢰를 위한 정보를 제공할 수 있도록 하기위해 제작하였다.
+
 Software : javascript(Three.js), html, python, flutter
 
 Hardware : Raspberry Pi 4B
